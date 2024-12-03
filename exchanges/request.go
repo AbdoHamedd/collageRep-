@@ -38,3 +38,6 @@ type UpdateDepartmentRequest struct {
 type DeleteDepartmentRequest struct {
 	ID uint `json:"id"`
 }
+type GetDepartmentByIdRequest struct {
+	ID uint `json:"id"`
+}

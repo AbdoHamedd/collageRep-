@@ -33,3 +33,10 @@ func deleteDepartment(c *gin.Context) {
 	response.Deleted(c)
 
 }
+func getDepartmentById(c *gin.Context) {
+	err, departemet := getDepartmentByIdValidation(c)
+	if err != nil {
+		return
+	}
+	response.Ok(c, departemet)
+}

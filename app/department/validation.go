@@ -73,10 +73,27 @@ func deleteDepartmentValidation(c *gin.Context) (error, uint) {
 		return err, req.ID
 	}
 	check, _ := validateDepartmentIsFound(req.ID)
-	if check {
+	if !check {
 		err = errors.New("department is found")
 		response.BadRequest(c, err.Error())
 		return err, req.ID
 	}
 	return nil, req.ID
+}
+
+func getDepartmentByIdValidation(c *gin.Context) (error, models.Department) {
+	var req exchanges.GetDepartmentByIdRequest
+	err := c.ShouldBindQuery(&req)
+	if err != nil {
+		response.BadRequest(c, err.Error())
+		return err, models.Department{}
+	}
+	check, department := validateDepartmentIsFound(req.ID)
+	if !check {
+		err = errors.New("department is not found")
+
+		response.BadRequest(c, err.Error())
+		return err, models.Department{}
+	}
+	return nil, department
 }

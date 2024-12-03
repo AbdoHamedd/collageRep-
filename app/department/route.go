@@ -7,5 +7,6 @@ func DepartmentRoute(router *gin.Engine) {
 	r.POST("/createDepartment", createDepartment)
 	r.PUT("/updateDepartment", updateDepartment)
 	r.DELETE("/deleteDepartment", deleteDepartment)
+	r.GET(("/getDepartmentById"), getDepartmentById)
 
 }

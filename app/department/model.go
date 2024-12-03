@@ -12,6 +12,7 @@ func createDepartmentModel(department *models.Department) {
 func updateDepartmentModel(department *models.Department) {
 	DataBase.DB.Save(&department)
 }
+
 func ValidateDepartmentNameIsUnique(name string) bool {
 	var count int64
 	DataBase.DB.Model(&models.Department{}).Where("name = ?", name).Count(&count)
@@ -23,6 +24,7 @@ func validateDepartmentNameIsUniqeForUpdate(name string, id uint) bool {
 	DataBase.DB.Model(&models.Department{}).Where("name = ?", name).Where("id != ?", id).Count(&count)
 	return count == 0
 }
+
 func validateDepartmentIsFound(id uint) (bool, models.Department) {
 	department := models.Department{}
 	DataBase.DB.Model(&models.Department{}).Where("id = ?", id).Find(&department)
