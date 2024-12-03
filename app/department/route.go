@@ -5,6 +5,6 @@ import "github.com/gin-gonic/gin"
 func DepartmentRoute(router *gin.Engine) {
 	r := router.Group("/department")
 	r.POST("/createDepartment", createDepartment)
-	r.POST("/updateDepartment", updateDepartment)
+	r.PUT("/updateDepartment", updateDepartment)
 
 }
