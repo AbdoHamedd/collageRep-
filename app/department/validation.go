@@ -64,3 +64,19 @@ func validateNameAndDescription(Name string, Description string) error {
 	}
 	return nil
 }
+
+func deleteDepartmentValidation(c *gin.Context) (error, uint) {
+	var req exchanges.DeleteDepartmentRequest
+	err := c.ShouldBindJSON(&req)
+	if err != nil {
+		response.BadRequest(c, err.Error())
+		return err, req.ID
+	}
+	check, _ := validateDepartmentIsFound(req.ID)
+	if check {
+		err = errors.New("department is found")
+		response.BadRequest(c, err.Error())
+		return err, req.ID
+	}
+	return nil, req.ID
+}

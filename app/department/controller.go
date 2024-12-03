@@ -23,3 +23,13 @@ func updateDepartment(c *gin.Context) {
 	response.Ok(c, department)
 
 }
+
+func deleteDepartment(c *gin.Context) {
+	err, id := deleteDepartmentValidation(c)
+	if err != nil {
+		return
+	}
+	deleteDepartmentService(id)
+	response.Deleted(c)
+
+}

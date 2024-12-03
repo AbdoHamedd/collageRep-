@@ -28,3 +28,8 @@ func validateDepartmentIsFound(id uint) (bool, models.Department) {
 	DataBase.DB.Model(&models.Department{}).Where("id = ?", id).Find(&department)
 	return department.ID != 0, department
 }
+
+func deleteDepartmentModel(id uint) {
+
+	DataBase.DB.Model(&models.Department{}).Where("id = ?", id).Delete(&models.Department{})
+}

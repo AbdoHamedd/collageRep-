@@ -16,3 +16,6 @@ func updateDepartmentServices(req exchanges.UpdateDepartmentRequest, departmet m
 	updateDepartmentModel(&updatedDepartment)
 	return updatedDepartment
 }
+func deleteDepartmentService(id uint) {
+	deleteDepartmentModel(id)
+}

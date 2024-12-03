@@ -34,3 +34,7 @@ type UpdateDepartmentRequest struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
 }
+
+type DeleteDepartmentRequest struct {
+	ID uint `json:"id"`
+}
