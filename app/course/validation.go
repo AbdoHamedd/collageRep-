@@ -111,12 +111,13 @@ func getCourseByIdValidation(c *gin.Context) (error, models.Course) {
 
 	return nil, Course
 }
-func getAllCoursesValidation(c *gin.Context) error {
-	var req exchanges.GetCourseByIdRequest
-	err := c.ShouldBindJSON(&req)
-	if err != nil {
-		response.BadRequest(c, err.Error())
-		return err
-	}
-	return nil
-}
+
+//func getAllCoursesValidation(c *gin.Context) error {
+//	var req exchanges.GetCourseByIdRequest
+//	err := c.ShouldBindJSON(&req)
+//	if err != nil {
+//		response.BadRequest(c, err.Error())
+//		return err
+//	}
+//	return nil
+//}

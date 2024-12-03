@@ -35,3 +35,9 @@ func deleteDepartmentModel(id uint) {
 
 	DataBase.DB.Model(&models.Department{}).Where("id = ?", id).Delete(&models.Department{})
 }
+
+func ShowAllDepartments() []models.Department {
+	departments := []models.Department{}
+	DataBase.DB.Find(&departments)
+	return departments
+}

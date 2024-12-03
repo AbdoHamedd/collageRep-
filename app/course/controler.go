@@ -42,10 +42,10 @@ func getCourseById(c *gin.Context) {
 	response.Ok(c, course)
 }
 func getAllCourses(c *gin.Context) {
-	err := getAllCoursesValidation(c)
-	if err != nil {
-		return
-	}
+	//err := getAllCoursesValidation(c)
+	//if err != nil {
+	//	return
+	//}
 	courses := ShowAllCoursesServices()
 	response.Ok(c, courses)
 }

@@ -19,3 +19,8 @@ func updateDepartmentServices(req exchanges.UpdateDepartmentRequest, departmet m
 func deleteDepartmentService(id uint) {
 	deleteDepartmentModel(id)
 }
+
+func showAll() []models.Department {
+	departments := ShowAllDepartments()
+	return departments
+}

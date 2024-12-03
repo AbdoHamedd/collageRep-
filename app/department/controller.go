@@ -40,3 +40,9 @@ func getDepartmentById(c *gin.Context) {
 	}
 	response.Ok(c, departemet)
 }
+func getAllDepartments(c *gin.Context) {
+	//getAllDepartmentsValidation()
+
+	departments := showAll()
+	response.Ok(c, departments)
+}

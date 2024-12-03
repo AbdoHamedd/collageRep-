@@ -97,3 +97,8 @@ func getDepartmentByIdValidation(c *gin.Context) (error, models.Department) {
 	}
 	return nil, department
 }
+
+//func getAllDepartmentsValidation(c *gin.Context) error  {
+//
+//	err := errors.New()
+//}
