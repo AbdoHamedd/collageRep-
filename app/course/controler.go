@@ -1,9 +1,13 @@
 package course
 
 import (
+	"basicCrudoperations/exchanges/courseExchabge/CommonPagination"
 	"basicCrudoperations/response"
+	"basicCrudoperations/tranform"
 	"github.com/gin-gonic/gin"
 )
+
+//في الريفيرنس يا اما بتعمل ال * و متعملش ريتيرن يا اما تعمل ريتيرن و متعملش ال *
 
 func CreateCourse(c *gin.Context) {
 	err, request := CreateCourseValidation(c)
@@ -11,7 +15,8 @@ func CreateCourse(c *gin.Context) {
 		return
 	}
 	course := CreateCourseService(request)
-	response.Created(c, course)
+	coursetransform := tranform.CourseTransform(course)
+	response.Created(c, coursetransform)
 }
 
 func updateCourse(c *gin.Context) {
@@ -20,7 +25,8 @@ func updateCourse(c *gin.Context) {
 		return
 	}
 	course = UpdateCourseService(request, course)
-	response.Ok(c, course)
+	coursetransform := tranform.CourseTransform(course)
+	response.Ok(c, coursetransform)
 }
 
 func deleteCourse(c *gin.Context) {
@@ -38,14 +44,17 @@ func getCourseById(c *gin.Context) {
 	if err != nil {
 		return
 	}
-
-	response.Ok(c, course)
+	coursetransform := tranform.CourseTransform(course)
+	response.Ok(c, coursetransform)
 }
+
 func getAllCourses(c *gin.Context) {
-	//err := getAllCoursesValidation(c)
-	//if err != nil {
-	//	return
-	//}
-	courses := ShowAllCoursesServices()
-	response.Ok(c, courses)
+	err, req := CommonPagination.ShawAllPaginationWithOrder(c)
+	if err != nil {
+		return
+	}
+	courses := ShowAllCoursesServices(req.Limit, req.Offset, req.Order)
+	coursetransform := tranform.CoursesTransform(courses)
+	response.Ok(c, coursetransform)
+
 }

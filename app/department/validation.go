@@ -1,52 +1,52 @@
 package department
 
 import (
-	"basicCrudoperations/exchanges"
+	"basicCrudoperations/exchanges/deptexchange"
 	"basicCrudoperations/models"
 	"basicCrudoperations/response"
 	"errors"
 	"github.com/gin-gonic/gin"
 )
 
-func createDepartmentValidation(c *gin.Context) (error, exchanges.CreateDepartmentRequest) {
-	var req exchanges.CreateDepartmentRequest
+func createDepartmentValidation(c *gin.Context) (error, deptexchange.CreateDepartmentRequest) {
+	var req deptexchange.CreateDepartmentRequest
 	err := c.ShouldBindJSON(&req)
 	if err != nil {
 		response.BadRequest(c, err.Error())
-		return err, exchanges.CreateDepartmentRequest{}
+		return err, deptexchange.CreateDepartmentRequest{}
 	}
 	err = validateNameAndDescription(req.Name, req.Description)
 	if err != nil {
 		response.BadRequest(c, err.Error())
-		return err, exchanges.CreateDepartmentRequest{}
+		return err, deptexchange.CreateDepartmentRequest{}
 	}
 	if !ValidateDepartmentNameIsUnique(req.Name) {
 		err = errors.New("department should be uniqe")
 		response.BadRequest(c, err.Error())
-		return err, exchanges.CreateDepartmentRequest{}
+		return err, deptexchange.CreateDepartmentRequest{}
 	}
 	return nil, req
 }
 
-func updateDepartmentValidation(c *gin.Context) (error, models.Department, exchanges.UpdateDepartmentRequest) {
-	var request exchanges.UpdateDepartmentRequest
+func updateDepartmentValidation(c *gin.Context) (error, models.Department, deptexchange.UpdateDepartmentRequest) {
+	var request deptexchange.UpdateDepartmentRequest
 	err := c.ShouldBindJSON(&request)
 	if err != nil {
 		response.BadRequest(c, err.Error())
-		return err, models.Department{}, exchanges.UpdateDepartmentRequest{}
+		return err, models.Department{}, deptexchange.UpdateDepartmentRequest{}
 	}
-	check, department := validateDepartmentIsFound(request.ID)
-	{
-		if !check {
-			err = errors.New("department is not found")
-			response.BadRequest(c, err.Error())
-			return err, models.Department{}, exchanges.UpdateDepartmentRequest{}
-		}
+	check, department := ValidateDepartmentIsFound(request.ID)
+
+	if !check {
+		err = errors.New("department is not found")
+		response.BadRequest(c, err.Error())
+		return err, models.Department{}, deptexchange.UpdateDepartmentRequest{}
 	}
+
 	if !validateDepartmentNameIsUniqeForUpdate(request.Name, request.ID) {
 		err = errors.New("department should be uniqe for update")
 		response.BadRequest(c, err.Error())
-		return err, models.Department{}, exchanges.UpdateDepartmentRequest{}
+		return err, models.Department{}, deptexchange.UpdateDepartmentRequest{}
 	}
 	return nil, department, request
 
@@ -65,30 +65,14 @@ func validateNameAndDescription(Name string, Description string) error {
 	return nil
 }
 
-func deleteDepartmentValidation(c *gin.Context) (error, uint) {
-	var req exchanges.DeleteDepartmentRequest
-	err := c.ShouldBindJSON(&req)
-	if err != nil {
-		response.BadRequest(c, err.Error())
-		return err, req.ID
-	}
-	check, _ := validateDepartmentIsFound(req.ID)
-	if !check {
-		err = errors.New("department is found")
-		response.BadRequest(c, err.Error())
-		return err, req.ID
-	}
-	return nil, req.ID
-}
-
 func getDepartmentByIdValidation(c *gin.Context) (error, models.Department) {
-	var req exchanges.GetDepartmentByIdRequest
-	err := c.ShouldBindQuery(&req)
+	var req deptexchange.GetByIdRequest
+	err := c.ShouldBindJSON(&req)
 	if err != nil {
 		response.BadRequest(c, err.Error())
 		return err, models.Department{}
 	}
-	check, department := validateDepartmentIsFound(req.ID)
+	check, department := ValidateDepartmentIsFound(req.ID)
 	if !check {
 		err = errors.New("department is not found")
 
@@ -98,7 +82,36 @@ func getDepartmentByIdValidation(c *gin.Context) (error, models.Department) {
 	return nil, department
 }
 
-//func getAllDepartmentsValidation(c *gin.Context) error  {
-//
-//	err := errors.New()
+func deleteDepartmentValidation(c *gin.Context) (error, uint) {
+	var req deptexchange.GetByIdRequest
+	err := c.ShouldBindJSON(&req)
+	if err != nil {
+		response.BadRequest(c, err.Error())
+		return err, req.ID
+	}
+	check, _ := ValidateDepartmentIsFound(req.ID)
+	if !check {
+		err = errors.New("department is found")
+		response.BadRequest(c, err.Error())
+		return err, req.ID
+	}
+	//new
+	check = ValidateDepartmentIsUsed(req.ID)
+	if check {
+		err = errors.New("department is already used")
+		response.BadRequest(c, err.Error())
+		return err, req.ID
+	}
+	return nil, req.ID
+}
+
+//func ValidateShawAll(c *gin.Context) (error, CommonPagination.Pagination) {
+//	var req CommonPagination.Pagination
+//	err := c.ShouldBindJSON(&req)
+//	if err != nil {
+//		response.BadRequest(c, err.Error())
+//		return nil, CommonPagination.Pagination{}
+//	}
+//	CommonPagination.ApplyPaginationDefaults(&req)
+//	return err, req
 //}

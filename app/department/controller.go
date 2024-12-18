@@ -1,7 +1,9 @@
 package department
 
 import (
+	"basicCrudoperations/exchanges/courseExchabge/CommonPagination"
 	"basicCrudoperations/response"
+	"basicCrudoperations/tranform"
 	"github.com/gin-gonic/gin"
 )
 
@@ -11,7 +13,8 @@ func createDepartment(c *gin.Context) {
 		return
 	}
 	department := CreateDepartmentService(request)
-	response.Created(c, department)
+	res := tranform.DepartmentTransFormReturn(department)
+	response.Created(c, res)
 }
 
 func updateDepartment(c *gin.Context) {
@@ -19,8 +22,9 @@ func updateDepartment(c *gin.Context) {
 	if err != nil {
 		return
 	}
-	updateDepartmentServices(request, department)
-	response.Ok(c, department)
+	department = updateDepartmentServices(request, department)
+	res := tranform.DepartmentTransFormReturn(department)
+	response.Ok(c, res)
 
 }
 
@@ -33,16 +37,22 @@ func deleteDepartment(c *gin.Context) {
 	response.Deleted(c)
 
 }
+
 func getDepartmentById(c *gin.Context) {
-	err, departemet := getDepartmentByIdValidation(c)
+	err, department := getDepartmentByIdValidation(c)
 	if err != nil {
 		return
 	}
-	response.Ok(c, departemet)
+	res := tranform.DepartmentTransFormReturn(department)
+	response.Ok(c, res)
 }
-func getAllDepartments(c *gin.Context) {
-	//getAllDepartmentsValidation()
 
-	departments := showAll()
-	response.Ok(c, departments)
+func getAllDepartments(c *gin.Context) {
+	err, req := CommonPagination.ShawAllPaginationWithOrder(c)
+	if err != nil {
+		return
+	}
+	departments := showAll(req.Limit, req.Offset, req.Order)
+	res := tranform.DepartmentsTransformFormReturn(departments)
+	response.Ok(c, res)
 }

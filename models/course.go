@@ -1,6 +1,8 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+)
 
 type Course struct {
 	gorm.Model
@@ -8,5 +10,5 @@ type Course struct {
 	Description  string     `json:"description"`
 	TotalHours   int        `json:"totalHours"`
 	Department   Department `json:"department"`
-	DepartmentID uint64     `json:"departmentID" validate:"required"`
+	DepartmentID uint       `json:"department_ID" validate:"required"`
 }
