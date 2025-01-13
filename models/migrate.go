@@ -7,4 +7,5 @@ import (
 func Migrate() {
 	DataBase.DB.AutoMigrate(&Course{}) // as refernce
 	DataBase.DB.AutoMigrate(&Department{})
+	DataBase.DB.AutoMigrate(&User{})
 }

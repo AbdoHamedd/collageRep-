@@ -1,8 +1,15 @@
 package user
 
-import "github.com/gin-gonic/gin"
+import (
+	"basicCrudoperations/auth"
+	"github.com/gin-gonic/gin"
+)
 
-func userRoute(route *gin.Engine) {
-	r := route.Group("/user")
-	r.POST("/signUp", signUp)
+func UserRoute(router *gin.Engine) {
+
+	r := router.Group("/users")
+	r.POST("/signup", signup)
+	r.POST("/login", login)
+	r.POST("/logout", logout).Use(auth.Auth)
+
 }
